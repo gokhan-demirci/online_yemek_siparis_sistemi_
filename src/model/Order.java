@@ -4,33 +4,36 @@ import java.util.ArrayList;
 
 /**
  * Sipariş işlemlerini yöneten sınıf.
- * Müşteri, restoran ve seçilen yemekleri birleştirir.
+ * Müşteri, restoran, yemekler ve sipariş durumunu içerir.
  */
 public class Order {
-    private Customer customer;       // Siparişi veren müşteri
-    private Restaurant restaurant;   // Sipariş verilen restoran
-    private ArrayList<MenuItem> items; // Sipariş edilen yemekler
-    private double totalPrice;       // Toplam tutar
+    private Customer customer;
+    private Restaurant restaurant;
+    private ArrayList<MenuItem> items;
+    private double totalPrice;
+    private OrderStatus status; // YENİ: Siparişin durumu (Enum)
 
     public Order(Customer customer, Restaurant restaurant) {
         this.customer = customer;
         this.restaurant = restaurant;
         this.items = new ArrayList<>();
         this.totalPrice = 0.0;
+        this.status = OrderStatus.RECEIVED; // Varsayılan durum: ALINDI
     }
 
-    // Siparişe yemek ekler ve tutarı günceller
     public void addItem(MenuItem item) {
         items.add(item);
-        totalPrice += item.getPrice(); // Fiyatı toplama ekle
-        System.out.println(item.getName() + " siparişe eklendi.");
+        totalPrice += item.getPrice();
     }
 
-    public double getTotalPrice() {
-        return totalPrice;
+    // Durumu değiştirmek için metod (Örn: Hazırlanıyor -> Yolda)
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+        System.out.println("Sipariş durumu güncellendi: " + status);
     }
 
-    public Customer getCustomer() {
-        return customer;
-    }
+    // Getter Metotları
+    public OrderStatus getStatus() { return status; }
+    public double getTotalPrice() { return totalPrice; }
+    public Customer getCustomer() { return customer; }
 }
