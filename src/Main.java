@@ -1,28 +1,43 @@
-import model.MenuItem;
-import model.Restaurant;
-import model.User;
+import model.*;
+import service.OrderService;
+import service.RestaurantService;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("--- Online Yemek Sipariş Sistemi Başlatılıyor ---\n");
+        System.out.println("--- SİSTEM BAŞLATILIYOR ---\n");
 
-        // 1. Örnek Kullanıcı Oluşturma (User Testi)
-        User user1 = new User("Gökhan Demirci", "gokhan@mail.com", "555-1234");
-        System.out.println(user1); // Kullanıcıyı ekrana yazdırır
+        // 1. Servisleri Başlat (Yöneticileri İşe Al)
+        RestaurantService restaurantService = new RestaurantService();
+        OrderService orderService = new OrderService();
 
-        // 2. Yemekleri Oluşturma (MenuItem Testi)
-        MenuItem item1 = new MenuItem("Adana Kebap", 240.0, "Bol Acılı");
-        MenuItem item2 = new MenuItem("Lahmacun", 50.0, "Taş Fırın");
-        MenuItem item3 = new MenuItem("Ayran", 20.0, "Köpüklü");
+        // 2. Veri Hazırlığı (Restoran ve Menü)
+        Restaurant rest1 = new Restaurant("Lezzet Durağı", 4.5);
+        rest1.addMenuItem(new MenuItem("İskender", 300.0, "Tereyağlı"));
+        rest1.addMenuItem(new MenuItem("Ayran", 30.0, "Köpüklü"));
 
-        // 3. Restoran Oluşturma ve Menüye Ekleme (Restaurant Testi)
-        Restaurant restaurant = new Restaurant("Lezzet Dünyası", 4.8);
-        restaurant.addMenuItem(item1);
-        restaurant.addMenuItem(item2);
-        restaurant.addMenuItem(item3);
+        Restaurant rest2 = new Restaurant("Pizza Limanı", 4.2);
+        rest2.addMenuItem(new MenuItem("Karışık Pizza", 250.0, "Büyük Boy"));
 
-        // 4. Menüyü Listeleme
-        System.out.println("\n--- Restoran Bilgileri ---");
-        restaurant.listMenu();
+        // 3. Restoranları Sisteme Kaydet
+        restaurantService.addRestaurant(rest1);
+        restaurantService.addRestaurant(rest2);
+
+        // 4. Müşteri Oluştur
+        Customer customer = new Customer("Gökhan Demirci", "gokhan@mail.com", "555-1234", "Kadıköy");
+
+        // 5. SİPARİŞ OLUŞTURMA (Servis Üzerinden)
+        System.out.println("\n--- Sipariş Süreci ---");
+        Order myOrder = orderService.createOrder(customer, rest1);
+
+        // Menüden yemek seçip siparişe ekliyoruz
+        myOrder.addItem(rest1.getMenu().get(0)); // İskender
+        myOrder.addItem(rest1.getMenu().get(1)); // Ayran
+
+        // 6. SONUÇLARI YAZDIR
+        System.out.println("\n--- Fiş Özeti ---");
+        System.out.println("Müşteri: " + myOrder.getCustomer().getName());
+        System.out.println("Restoran: " + rest1.getName());
+        System.out.println("Durum: " + myOrder.getStatus()); // Enum testi
+        System.out.println("Toplam Tutar: " + myOrder.getTotalPrice() + " TL");
     }
 }
