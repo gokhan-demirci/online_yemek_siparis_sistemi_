@@ -2,25 +2,24 @@ import model.*;
 import service.OrderService;
 import service.RestaurantService;
 import utils.DataGenerator;
+import payment.*; // Ödeme sınıflarını dahil ettik
 
 import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("--- SİSTEM BAŞLATILIYOR (Versiyon 2.0) ---\n");
+        System.out.println("--- SİSTEM BAŞLATILIYOR (Versiyon 3.0 - Ödeme Entegrasyonu) ---\n");
 
-        // 1. Servisleri ve Veri Üreticiyi Başlat
+        // 1. Servisleri Başlat
         RestaurantService restaurantService = new RestaurantService();
         OrderService orderService = new OrderService();
         DataGenerator dataGenerator = new DataGenerator();
 
-        // 2. Hazır Verileri Yükle
-        // Tek satırla bütün restoranlar ve menüler yükleniyor.
+        // 2. Verileri Yükle
         dataGenerator.initializeData(restaurantService);
 
-        // 3. Kullanılacak Restoranı Seç
-        ArrayList<Restaurant> restaurantList = restaurantService.getRestaurants();
-        Restaurant selectedRestaurant = restaurantList.get(0); // Lezzet Durağı'nı seçtik
+        // 3. Restoran Seç (Lezzet Durağı)
+        Restaurant selectedRestaurant = restaurantService.getRestaurants().get(0);
 
         // 4. Müşteri Oluştur
         Customer customer = new Customer("Gökhan Demirci", "gokhan@mail.com", "555-1234", "Kadıköy");
@@ -28,16 +27,21 @@ public class Main {
         // 5. Sipariş Oluştur
         System.out.println("\n--- Sipariş Oluşturuluyor ---");
         Order newOrder = orderService.createOrder(customer, selectedRestaurant);
-
-        // Menüden örnek yemekler eklendi
         newOrder.addItem(selectedRestaurant.getMenu().get(0)); // İskender
         newOrder.addItem(selectedRestaurant.getMenu().get(2)); // Ayran
 
-        // 6. Sonuç Yazdır
-        System.out.println("\n--- Fiş Detayı ---");
-        System.out.println("Restoran: " + selectedRestaurant.getName());
-        System.out.println("Müşteri: " + newOrder.getCustomer().getName());
-        System.out.println("Toplam Tutar: " + newOrder.getTotalPrice() + " TL");
-        System.out.println("Sipariş Durumu: " + newOrder.getStatus());
+        // 6. Toplam Tutarı Göster
+        System.out.println("\n--- Ödeme Ekranı ---");
+        System.out.println("Ödenecek Tutar: " + newOrder.getTotalPrice() + " TL");
+
+        // 7. ÖDEME İŞLEMİ
+        PaymentMethod paymentMethod = new CreditCardPayment("1234-5678-9012-3456", "Gökhan Demirci");
+
+        // Ödemeyi gerçekleştir
+        paymentMethod.pay(newOrder.getTotalPrice());
+
+        // 8. Sipariş Durumunu Güncelle
+        newOrder.setStatus(OrderStatus.PREPARING);
+        System.out.println("\nSipariş Durumu: " + newOrder.getStatus());
     }
 }
