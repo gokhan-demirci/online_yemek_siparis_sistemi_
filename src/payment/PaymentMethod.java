@@ -1,9 +1,7 @@
 package payment;
 
-/**
- * Tüm ödeme yöntemlerinin uyması gereken kural seti (Interface).
- * Polymorphism yapısını burada kuruyoruz.
- */
+import model.Order;
+
 public interface PaymentMethod {
-    void pay(double amount);
+    void pay(Order order);
 }

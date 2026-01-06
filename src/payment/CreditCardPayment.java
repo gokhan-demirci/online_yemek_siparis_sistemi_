@@ -1,5 +1,18 @@
 package payment;
 
+import model.Order;
+import model.OrderStatus;
+
+/**
+ * Kredi Kartı ile online ödeme işlemlerini yöneten sınıf.
+ * <p>
+ * {@link PaymentMethod} arayüzünü uygular. Banka ile iletişim kurularak
+ * ödemenin sanal pos üzerinden çekilmesini simüle eder.
+ * </p>
+ *
+ * @author Gökhan Demirci
+ */
+
 public class CreditCardPayment implements PaymentMethod {
     private String cardNumber;
     private String cardHolder;
@@ -10,9 +23,11 @@ public class CreditCardPayment implements PaymentMethod {
     }
 
     @Override
-    public void pay(double amount) {
-        // Gerçek hayatta burada banka servisine bağlanılır.
+    public void pay(Order order) {
         System.out.println("Banka ile iletişim kuruluyor...");
-        System.out.println(amount + " TL tutarındaki ödeme " + cardNumber + " nolu karttan çekildi.");
+        System.out.println(order.getTotalPrice() + " TL tutarındaki ödeme " + cardNumber + " nolu karttan çekildi.");
+
+        // Online ödemede sipariş mutfağa (Hazırlanıyor) düşer
+        order.setStatus(OrderStatus.PREPARING);
     }
 }
