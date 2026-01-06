@@ -195,7 +195,7 @@ public class Main {
         r2.addMenuItem(new MenuItem("Ice Tea Şeftali", 40.0, "Büyük boy"));
 
 
-        Restaurant r3 = new Restaurant("Sultan Sofrası1", 4.9);
+        Restaurant r3 = new Restaurant("Sultan Sofrası", 4.9);
         // Sebze & Salata
         r3.addMenuItem(new MenuItem("Zeytinyağlı Enginar", 160.0, "Dereotlu, bezelyeli"));
         r3.addMenuItem(new MenuItem("Sezar Salata", 190.0, "Izgara tavuklu, krutonlu"));
