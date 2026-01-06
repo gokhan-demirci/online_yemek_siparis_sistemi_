@@ -1,43 +1,43 @@
 import model.*;
 import service.OrderService;
 import service.RestaurantService;
+import utils.DataGenerator;
+
+import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("--- SİSTEM BAŞLATILIYOR ---\n");
+        System.out.println("--- SİSTEM BAŞLATILIYOR (Versiyon 2.0) ---\n");
 
-        // 1. Servisleri Başlat (Yöneticileri İşe Al)
+        // 1. Servisleri ve Veri Üreticiyi Başlat
         RestaurantService restaurantService = new RestaurantService();
         OrderService orderService = new OrderService();
+        DataGenerator dataGenerator = new DataGenerator();
 
-        // 2. Veri Hazırlığı (Restoran ve Menü)
-        Restaurant rest1 = new Restaurant("Lezzet Durağı", 4.5);
-        rest1.addMenuItem(new MenuItem("İskender", 300.0, "Tereyağlı"));
-        rest1.addMenuItem(new MenuItem("Ayran", 30.0, "Köpüklü"));
+        // 2. Hazır Verileri Yükle
+        // Tek satırla bütün restoranlar ve menüler yükleniyor.
+        dataGenerator.initializeData(restaurantService);
 
-        Restaurant rest2 = new Restaurant("Pizza Limanı", 4.2);
-        rest2.addMenuItem(new MenuItem("Karışık Pizza", 250.0, "Büyük Boy"));
-
-        // 3. Restoranları Sisteme Kaydet
-        restaurantService.addRestaurant(rest1);
-        restaurantService.addRestaurant(rest2);
+        // 3. Kullanılacak Restoranı Seç
+        ArrayList<Restaurant> restaurantList = restaurantService.getRestaurants();
+        Restaurant selectedRestaurant = restaurantList.get(0); // Lezzet Durağı'nı seçtik
 
         // 4. Müşteri Oluştur
         Customer customer = new Customer("Gökhan Demirci", "gokhan@mail.com", "555-1234", "Kadıköy");
 
-        // 5. SİPARİŞ OLUŞTURMA (Servis Üzerinden)
-        System.out.println("\n--- Sipariş Süreci ---");
-        Order myOrder = orderService.createOrder(customer, rest1);
+        // 5. Sipariş Oluştur
+        System.out.println("\n--- Sipariş Oluşturuluyor ---");
+        Order newOrder = orderService.createOrder(customer, selectedRestaurant);
 
-        // Menüden yemek seçip siparişe ekliyoruz
-        myOrder.addItem(rest1.getMenu().get(0)); // İskender
-        myOrder.addItem(rest1.getMenu().get(1)); // Ayran
+        // Menüden örnek yemekler eklendi
+        newOrder.addItem(selectedRestaurant.getMenu().get(0)); // İskender
+        newOrder.addItem(selectedRestaurant.getMenu().get(2)); // Ayran
 
-        // 6. SONUÇLARI YAZDIR
-        System.out.println("\n--- Fiş Özeti ---");
-        System.out.println("Müşteri: " + myOrder.getCustomer().getName());
-        System.out.println("Restoran: " + rest1.getName());
-        System.out.println("Durum: " + myOrder.getStatus()); // Enum testi
-        System.out.println("Toplam Tutar: " + myOrder.getTotalPrice() + " TL");
+        // 6. Sonuç Yazdır
+        System.out.println("\n--- Fiş Detayı ---");
+        System.out.println("Restoran: " + selectedRestaurant.getName());
+        System.out.println("Müşteri: " + newOrder.getCustomer().getName());
+        System.out.println("Toplam Tutar: " + newOrder.getTotalPrice() + " TL");
+        System.out.println("Sipariş Durumu: " + newOrder.getStatus());
     }
 }
