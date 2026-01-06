@@ -171,7 +171,7 @@ public class Main {
     // Sisteme zenginleştirilmiş test verileri ekleyen metot
     private static void initializeData() {
 
-        Restaurant r1 = new Restaurant("Geleneksel Yemekler", 4.8);
+        Restaurant r1 = new Restaurant("Anadolu Sofrası", 4.8);
         // Çorbalar
         r1.addMenuItem(new MenuItem("Mercimek Çorbası", 70.0, "Süzme, tereyağlı sos ile"));
         r1.addMenuItem(new MenuItem("Yayla Çorbası", 70.0, "Naneli soslu"));
@@ -186,7 +186,7 @@ public class Main {
         r1.addMenuItem(new MenuItem("Yayık Ayran", 30.0, "Bol köpüklü, bakır bardakta"));
 
 
-        Restaurant r2 = new Restaurant("Fast Foodlar", 4.5);
+        Restaurant r2 = new Restaurant("Fast Food Diyarı", 4.5);
         r2.addMenuItem(new MenuItem("Cheeseburger Menü", 260.0, "180gr köfte, patates ve içecek"));
         r2.addMenuItem(new MenuItem("Pizza Margherita", 210.0, "İtalyan hamuru, mozzarella, fesleğen"));
         r2.addMenuItem(new MenuItem("Barbekü Tavuk Pizza", 240.0, "Özel soslu"));
@@ -195,7 +195,7 @@ public class Main {
         r2.addMenuItem(new MenuItem("Ice Tea Şeftali", 40.0, "Büyük boy"));
 
 
-        Restaurant r3 = new Restaurant("Sebzeler", 4.9);
+        Restaurant r3 = new Restaurant("Sultan Sofrası1", 4.9);
         // Sebze & Salata
         r3.addMenuItem(new MenuItem("Zeytinyağlı Enginar", 160.0, "Dereotlu, bezelyeli"));
         r3.addMenuItem(new MenuItem("Sezar Salata", 190.0, "Izgara tavuklu, krutonlu"));
